@@ -1,0 +1,54 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@edufin-back/catalog-prisma-client": [
+        "libs/catalog-prisma-client/src/index.ts"
+      ],
+      "@edufin-back/common": ["libs/common/src/index.ts"],
+      "@edufin-back/common/abstract": ["libs/common/src/abstract/index.ts"],
+      "@edufin-back/common/configs": ["libs/common/src/configs/index.ts"],
+      "@edufin-back/common/decorators": ["libs/common/src/decorators/index.ts"],
+      "@edufin-back/common/guards": ["libs/common/src/guards/index.ts"],
+      "@edufin-back/common/helper-services": [
+        "libs/common/src/helper-services/index.ts"
+      ],
+      "@edufin-back/common/hoc": ["libs/common/src/hoc/index.ts"],
+      "@edufin-back/common/locale": ["libs/common/src/locale/index.ts"],
+      "@edufin-back/common/services": ["libs/common/src/services/index.ts"],
+      "@edufin-back/general-prisma-client": [
+        "libs/general-prisma-client/src/index.ts"
+      ],
+      "@edufin-back/shared": ["libs/shared/src/index.ts"],
+      "@edufin-back/shared/constants": ["libs/shared/src/constants/index.ts"],
+      "@edufin-back/shared/dto": ["libs/shared/src/dto/index.ts"],
+      "@edufin-back/shared/entities": ["libs/shared/src/entities/index.ts"],
+      "@edufin-back/shared/enum": ["libs/shared/src/enum/index.ts"],
+      "@edufin-back/shared/interfaces": ["libs/shared/src/interfaces/index.ts"],
+      "@edufin-back/shared/types": ["libs/shared/src/types/index.ts"],
+      "@edufin-back/student-prisma-client": [
+        "libs/student-prisma-client/src/index.ts"
+      ],
+      "@edufin-back/test-prisma-client": [
+        "libs/test-prisma-client/src/index.ts"
+      ],
+      "@edufin-back/user-prisma-client": [
+        "libs/user-prisma-client/src/index.ts"
+      ]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

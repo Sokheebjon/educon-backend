@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+  binaryTargets   = ["native", "rhel-openssl-1.0.x", "debian-openssl-3.0.x"]
+}
+
+generator nestjsDto {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma-client-js"
+  // outputToNestJsResourceStructure = "true"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("GENERAL_DATABASE_URL")
+}
+
+model File {
+  id           String   @id @default(uuid())
+  orginal_name String
+  url          String   @unique()
+  mime_type    String
+  size         Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum SMS_DELIVERY_TYPE {
+  WAITING
+  SUCCESS
+  FAILURE
+}
+
+model SmsReceivers {
+  id          String            @id @default(uuid())
+  phoneNumber String
+  status      SMS_DELIVERY_TYPE
+  message_id  String
+  sms_id      String
+  sms         Sms               @relation(fields: [sms_id], references: [id])
+}
+
+model Sms {
+  id              String         @id @default(uuid())
+  message         String         @db.Text
+  receivers_count Int            @default(0)
+  createdAt       DateTime       @default(now())
+  receivers       SmsReceivers[]
+  updatedAt       DateTime       @updatedAt
+}

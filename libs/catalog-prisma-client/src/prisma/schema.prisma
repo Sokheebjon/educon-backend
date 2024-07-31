@@ -1,0 +1,262 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+  binaryTargets   = ["native", "rhel-openssl-1.0.x", "debian-openssl-3.0.x"]
+}
+
+generator nestjsDto {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma-client-js"
+
+  // outputToNestJsResourceStructure = "true"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("CATALOG_DATABASE_URL")
+}
+
+model EducationForm {
+  id                   String                @id @default(uuid())
+  nameUz               String
+  nameRu               String
+  nameEn               String
+  isExistInUniversity  Boolean               @default(true)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  education_contracts  EducationContracts[]
+  education_direction  EducationDirection[]
+  agreement_prices     AgreementPrice[]
+  registration_purpose RegistrationPurpose[]
+  allowed_courses      Int[]
+
+  //
+  education_direction_duration EducationDirectionDuration[]
+}
+
+model EducationLanguage {
+  id                  String               @id @default(uuid())
+  nameUz              String
+  nameRu              String
+  nameEn              String
+  education_direction EducationDirection[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+}
+
+model AcademicDegree {
+  id                  String               @id @default(uuid())
+  nameUz              String
+  nameRu              String
+  nameEn              String
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  education_direction EducationDirection[]
+}
+
+model Department {
+  id        String   @id @default(uuid())
+  nameUz    String
+  nameRu    String
+  nameEn    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Position {
+  id        String   @id @default(uuid())
+  nameUz    String
+  nameRu    String
+  nameEn    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AcademicSubjects {
+  id              String           @id @default(uuid())
+  nameUz          String
+  nameRu          String
+  nameEn          String
+  academic_blocks AcademicBlocks[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model AcademicBlocks {
+  id                  String               @id @default(uuid())
+  subject_id          String
+  subject             AcademicSubjects     @relation(fields: [subject_id], references: [id])
+  score               Float
+  tests_count         Int
+  test_duration       Int                  @default(10)
+  education_direction EducationDirection[]
+}
+
+model EducationDirection {
+  id                   String                       @id @default(uuid())
+  code                 Int
+  photo                String?
+  short_title          String
+  nameUz               String
+  nameRu               String
+  nameEn               String
+  academic_degree_id   String
+  duration             EducationDirectionDuration[]
+  registration_purpose RegistrationPurpose[]
+  academic_degree      AcademicDegree               @relation(fields: [academic_degree_id], references: [id], onDelete: Cascade)
+  academic_blocks      AcademicBlocks[]
+  education_contracts  EducationContracts[]
+  education_languages  EducationLanguage[]
+  createdAt            DateTime                     @default(now())
+  updatedAt            DateTime                     @updatedAt
+  education_form       EducationForm[]
+  agreement_prices     AgreementPrice[]
+  exam_rooms           ExamRooms[]
+  allowed_courses      Int[]
+}
+
+model EducationDirectionDuration {
+  id                     String             @id @default(uuid())
+  education_direction_id String
+  education_direction    EducationDirection @relation(fields: [education_direction_id], references: [id])
+  education_form_id      String
+  education_form         EducationForm      @relation(fields: [education_form_id], references: [id])
+  duration               Int
+  duration_text          String?
+
+  //
+}
+
+model EducationContracts {
+  id                     String             @id @default(uuid())
+  education_direction_id String
+  education_direction    EducationDirection @relation(fields: [education_direction_id], references: [id])
+  education_form_id      String
+  education_form         EducationForm      @relation(fields: [education_form_id], references: [id])
+  price                  Float
+}
+
+model AgreementPrice {
+  id                     String                 @id @default(uuid())
+  education_direction_id String
+  education_direction    EducationDirection     @relation(fields: [education_direction_id], references: [id])
+  education_form_id      String
+  education_form         EducationForm          @relation(fields: [education_form_id], references: [id])
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
+  agreement_price_limits AgreementPriceLimits[]
+}
+
+model AgreementPriceLimits {
+  id                 String         @id @default(uuid())
+  from_score         Int
+  to_score           Int
+  price              Float
+  price_in_text      String?
+  agreement_price_id String
+  agreement_price    AgreementPrice @relation(fields: [agreement_price_id], references: [id], onDelete: Cascade)
+}
+
+model Rooms {
+  id                    String   @id @default(uuid())
+  room_number           Int
+  nameUz                String
+  nameRu                String
+  nameEn                String
+  responsible_person_id String
+  capacity              Int
+  phone_number          String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  exam_rooms ExamRooms[]
+}
+
+enum RegistrationPurposeEnum {
+  PROSPECTIVE_STUDENT
+  STUDY_TRANSFER
+  SECOND_SPECIALIZATION
+  MASTER_DEGREE
+}
+
+model RegistrationPurpose {
+  id        String                  @id @default(uuid())
+  type      RegistrationPurposeEnum @unique()
+  nameUz    String
+  nameRu    String
+  nameEn    String
+  createdAt DateTime                @default(now())
+  updatedAt DateTime                @updatedAt
+
+  //
+  education_direction EducationDirection[]
+  education_form      EducationForm[]
+}
+
+model ExamTimesInRooms {
+  id           String    @id @default(uuid())
+  time         String
+  exam_room_id String
+  exam_room    ExamRooms @relation(fields: [exam_room_id], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model ExamRooms {
+  id                     String             @id @default(uuid())
+  education_direction_id String
+  education_direction    EducationDirection @relation(fields: [education_direction_id], references: [id])
+  room_id                String
+  room                   Rooms              @relation(fields: [room_id], references: [id])
+  room_capacity          Int
+  exam_date              DateTime
+  exam_date_formatted    String
+  exam_times             ExamTimesInRooms[]
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+}
+
+model Gender {
+  id        Int      @id
+  nameUz    String
+  nameRu    String
+  nameEn    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ExamFormType {
+  ONLINE
+  OFFLINE
+}
+
+model ExamForm {
+  id        Int          @id
+  nameUz    String
+  nameRu    String
+  nameEn    String
+  type      ExamFormType @default(OFFLINE)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model Country {
+  id        String   @id @default(uuid())
+  nameUz    String
+  nameRu    String
+  nameEn    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model University {
+  id        String   @id @default(uuid())
+  nameUz    String
+  nameRu    String
+  nameEn    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -1,0 +1,7 @@
+export enum ENUM_PERMISSION_ACTION {
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE',
+  READ = 'READ',
+  MANAGE = 'MANAGE',
+}

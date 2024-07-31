@@ -1,0 +1,61 @@
+nx g @nx/nest:application --name=auth-microservice --directory=/apps/auth-microservice --projectNameAndRootFormat=as-provided
+npx nx run auth-microservice:serve --configuration=development
+
+edufinprodpassword
+//
+prisma running
+nx run my-prisma-schema:migrate
+nx run my-prisma-schema:generate-types
+nx run my-prisma-schema:prisma format
+ B eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InN1YiI6ImMxMDY3NGZlLTU0YzktNGEyYy04YWNkLTc4Nzc4Y2I5YTA2ZiIsInBob25lTnVtYmVyIjoiKzk5ODkwMDAwMDAwMCJ9LCJpYXQiOjE3MTc5MjU5ODcsImV4cCI6MTcxODAxMjM4NywiYXVkIjoiaHR0cHM6Ly9hbGJpc29uLmNvbSIsImlzcyI6ImFsYmlzb24iLCJzdWIiOiJuZXN0RGV2ZWxvcG1lbnQifQ.wCW5rnlLcHz5Ho17zq-mGMOSM9sdQpcDP3BNZkaNkD8
+
+# generate types for all Prisma schemas
+npx nx run-many --target generate-types
+npx nx run auth-microservice:serve:development
+
+
+npx nx run api-gateway:serve:development
+
+ nx migrate latest
+
+
+regid 9889e920-28a2-4aad-aac3-54a77aa53fa1
+Token:
+admin
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InN1YiI6ImMxMDY3NGZlLTU0YzktNGEyYy04YWNkLTc4Nzc4Y2I5YTA2ZiIsInBob25lTnVtYmVyIjoiKzk5ODkwMDAwMDAwMCJ9LCJpYXQiOjE3MTk2OTAwMTgsImV4cCI6MTcxOTc3NjQxOCwiYXVkIjoiaHR0cHM6Ly9hbGJpc29uLmNvbSIsImlzcyI6ImFsYmlzb24iLCJzdWIiOiJuZXN0RGV2ZWxvcG1lbnQifQ.pBVQgUXLSFFO6DDG3_L_vWiDL35V-XjEkQcljwKuj0A
+"id": "9889e920-28a2-4aad-aac3-54a77aa53fa1",
+      "first_name": "Teshaev",
+      "last_name": "Furqat",
+      "father_name": "Oktyabrovich",
+      "primary_phone": "+998770370135",
+      "secondary_phone": null,
+      "registration_purpose_id": null,
+      "passport": "AA7777777",
+      "birth_date": "2024-04-07T21:15:28.466Z",
+      "gender_id": null,
+      "education_direction_id": null,
+      "studied_education_direction": null,
+      "education_form_id": null,
+      "studied_education_form_id": null,
+      "education_langiage_id": "46a628bd-101a-46b5-8e18-e884557d4fdb",
+      "passport_file_id": "21857a97-d57c-4456-a6d0-a035ed067200",
+      "diplom_file_id": "21857a97-d57c-4456-a6d0-a035ed067200",
+      "ielts_file_id": "21857a97-d57c-4456-a6d0-a035ed067200",
+      "dtm_file_id": null,
+      "exam_form_id": null,
+      "exam_rooms_id": null,
+      "exam_times_in_rooms_id": null,
+      "studied_country": null,
+      "studied_university": null,
+      "studied_direction": null,
+      "finished_course": null,
+      "starting_course": null,
+      "crm_id": 9335473,
+      "step": 0,
+      "status": "IN_PROCESS",
+      "application_number": 202447239,
+      "createdAt": "2024-04-07T20:37:26.073Z",
+      "exam_end_time": null,
+      "updatedAt": "2024-04-07T21:30:03.063Z",
+      "education_langiage": "46a628bd-101a-46b5-8e18-e884557d4fdb"
+    

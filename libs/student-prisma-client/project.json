@@ -1,0 +1,87 @@
+{
+  "name": "student-prisma-client",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/student-prisma-client/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/student-prisma-client",
+        "tsConfig": "libs/student-prisma-client/tsconfig.lib.json",
+        "packageJson": "libs/student-prisma-client/package.json",
+        "main": "libs/student-prisma-client/src/index.ts",
+        "assets": ["libs/student-prisma-client/*.md"]
+      }
+    },
+    "prisma": {
+      "command": "prisma",
+      "options": {
+        "cwd": "libs/student-prisma-client/src"
+      }
+    },
+    "seed": {
+      "command": "ts-node prisma/prisma-seed.ts",
+      "options": {
+        "cwd": "libs/student-prisma-client/src"
+      }
+    },
+    "migrate-dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate dev --name init",
+        "cwd": "libs/student-prisma-client/src",
+        "envFile": ".env.development"
+      }
+    },
+    "migrate-prod": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate dev --name init",
+        "cwd": "libs/student-prisma-client/src",
+        "envFile": ".env.production"
+      }
+    },
+    "generate-dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": " npx prisma generate",
+        "cwd": "libs/student-prisma-client/src",
+        "envFile": ".env.development"
+      }
+    },
+    "generate-prod": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": " npx prisma generate",
+        "cwd": "libs/student-prisma-client/src",
+        "envFile": ".env.production"
+      }
+    },
+    "push-prisma": {
+      "command": "prisma db push",
+      "options": {
+        "cwd": "libs/student-prisma-client/src"
+      }
+    },
+    "format-prisma": {
+      "command": "prisma format",
+      "options": {
+        "cwd": "libs/student-prisma-client/src"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/student-prisma-client/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

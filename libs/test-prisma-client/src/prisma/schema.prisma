@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+  binaryTargets   = ["native", "rhel-openssl-1.0.x", "debian-openssl-3.0.x"]
+}
+
+generator nestjsDto {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma-client-js"
+  // outputToNestJsResourceStructure = "true"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("TEST_DATABASE_URL")
+}
+
+model TestAnswers {
+  id                    String                @id @default(uuid())
+  nameUz                String?
+  nameRu                String?
+  nameEn                String?
+  photo_id              String?
+  is_correct            Boolean
+  question_id           String
+  question              TestQuestions         @relation(fields: [question_id], references: [id], onDelete: Cascade)
+  //
+  student_tests_answers StudentTestsAnswers[]
+}
+
+model TestQuestions {
+  id                    String                @id @default(uuid())
+  nameUz                String?
+  nameRu                String?
+  nameEn                String?
+  photo_id              String?
+  test_answers          TestAnswers[]
+  test_id               String
+  test                  Tests                 @relation(fields: [test_id], references: [id])
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  //
+  student_tests_answers StudentTestsAnswers[]
+}
+
+model Tests {
+  id         String          @id @default(uuid())
+  subject_id String
+  test_count Int
+  questions  TestQuestions[]
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+}
+
+model StudentTestsAnswers {
+  id              String        @id @default(uuid())
+  registration_id String
+  question_id     String
+  subject_id      String
+  question        TestQuestions @relation(fields: [question_id], references: [id], onDelete: Cascade)
+  answer_id       String?
+  answer          TestAnswers?  @relation(fields: [answer_id], references: [id], onDelete: Cascade)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@unique([registration_id, question_id])
+}

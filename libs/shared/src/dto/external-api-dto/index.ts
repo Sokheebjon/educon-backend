@@ -1,0 +1,1 @@
+export * from "./get-personal-info-dto"

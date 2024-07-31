@@ -1,0 +1,75 @@
+{
+  "name": "catalog-prisma-client",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/catalog-prisma-client/src",
+  "projectType": "library",
+  "targets": {
+    "prisma": {
+      "command": "prisma",
+      "options": {
+        "cwd": "libs/catalog-prisma-client/src"
+      }
+    },
+    "seed": {
+      "command": "ts-node prisma/prisma-seed.ts",
+      "options": {
+        "cwd": "libs/catalog-prisma-client/src"
+      }
+    },
+
+    "migrate-dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate dev --name init",
+        "cwd": "libs/catalog-prisma-client/src",
+        "envFile": ".env.development"
+      }
+    },
+    "migrate-prod": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma migrate dev --name init",
+        "cwd": "libs/catalog-prisma-client/src",
+        "envFile": ".env.production"
+      }
+    },
+    "generate-dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma generate",
+        "cwd": "libs/catalog-prisma-client/src",
+        "envFile": ".env.development"
+      }
+    },
+    "generate-prod": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx prisma generate",
+        "cwd": "libs/catalog-prisma-client/src",
+        "envFile": ".env.production"
+      }
+    },
+   
+    "push-prisma": {
+      "command": "prisma db push",
+      "options": {
+        "cwd": "libs/catalog-prisma-client/src"
+      }
+    },
+    "format-prisma": {
+      "command": "prisma format",
+      "options": {
+        "cwd": "libs/catalog-prisma-client/src"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f libs/catalog-prisma-client/Dockerfile . -t catalog-prisma-client"
+    }
+  },
+  "tags": []
+}

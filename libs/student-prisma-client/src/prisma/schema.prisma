@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+  binaryTargets   = ["native", "rhel-openssl-1.0.x", "debian-openssl-3.0.x"]
+}
+
+generator nestjsDto {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma-client-js"
+  // outputToNestJsResourceStructure = "true"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("STUDENT_DATABASE_URL")
+}
+
+enum ApplicationStatus {
+  IN_PROCESS // when  an application has been submitted but not yet reviewed
+  APPROVED_FOR_EXAM // after admin approve all documents
+  REJECTED // if admin rejects 
+  EXAM_STARTED // when  student starts online  exam or go university for offline exam
+  EXAM_FINISHED // when student submit exam
+  EXAM_CANCELLED //if student doesnt come to offline or online exam
+  STUDENT_PASSED // if student passes
+  STUDENT_FAILED // if student  fails
+}
+
+model Application {
+  id                          String            @id @default(uuid())
+  citizenship                 String?
+  birth_place                 String?
+  pinfl                       String?
+  name_cyrl                   String?
+  surname_cyrl                String?
+  middlename_cyrl             String?
+  nationality                 String?
+  studied_university_cyrl     String?
+  is_contract_generated       Boolean?          @default(false)
+  first_name                  String?
+  last_name                   String?
+  father_name                 String?
+  primary_phone               String            @unique()
+  secondary_phone             String?
+  registration_purpose_id     String?
+  passport                    String?           @unique()
+  birth_date                  DateTime?
+  gender_id                   Int?
+  education_direction_id      String?
+  studied_education_direction String?
+  education_form_id           String?
+  studied_education_form_id   String?
+  education_language_id       String?
+  passport_file_id            String?
+  diplom_file_id              String?
+  ielts_file_id               String?
+  dtm_file_id                 String?
+  exam_form_id                Int?
+  exam_rooms_id               String?
+  exam_times_in_rooms_id      String?
+  studied_country             String?
+  studied_university          String?
+  studied_direction           String?
+  finished_course             Int?
+  starting_course             Int?
+  crm_id                      Int?
+  crm_contact_id              Int?
+  step                        Int               @default(0)
+  status                      ApplicationStatus @default(IN_PROCESS)
+  application_number          Int               @unique()
+  createdAt                   DateTime          @default(now())
+  exam_end_time               DateTime?
+  contract_generated_date     DateTime?
+  studied_education_direction_cyrl String?
+  contract_number             String?
+  contract_summa              Float?
+  total_score                 Float?
+  course                      String?
+  updatedAt                   DateTime          @updatedAt
+  comment                     String?
+}

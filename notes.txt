@@ -1,0 +1,5 @@
+//country (tahsil olgan davlat)
+//university (tahsil olgan universitet)
+
+
+//add enum to registartion purpos

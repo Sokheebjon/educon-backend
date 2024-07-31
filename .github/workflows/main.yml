@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev 
+jobs:
+  build:
+    runs-on: ${{ github.ref == 'refs/heads/main' && 'edufin-uzb-prod' || 'edufin-dev' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+      
+      - name: Add yarn globally
+        run: npm install --global yarn
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build and Test
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "Running production build"
+            sudo cp .env.production .env
+            npx nx run-many --target=generate-prod 
+            npx nx run-many --target=build --production
+          else
+            echo "Running development build"
+            sudo cp .env.development .env
+            npx nx run-many --target=generate-dev 
+            npx nx run-many --target=build --development
+          fi
+
+      - name: Deploy
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            cp -a /home/actions-runner/_work/edufin-back/edufin-back/. /home/user/edufin/
+            cd /home/user/edufin/
+          else
+            cp -a ~/actions-runner/_work/edufin-back/edufin-back/. /home/edufin/
+            cd /home/edufin/
+          fi
+         
+          sudo pm2 kill
+          sudo docker-compose down
+          sudo docker-compose up -d
+          sudo pm2 start dist/apps/api-gateway/main.js --name api-gateway
+          sudo pm2 start dist/apps/auth-microservice/main.js --name auth-microservice
+          sudo pm2 start dist/apps/catalog-microservice/main.js --name catalog-microservice
+          sudo pm2 start dist/apps/file-microservice/main.js --name file-microservice
+          sudo pm2 start dist/apps/test-microservice/main.js --name test-microservice
+          sudo pm2 start dist/apps/general-microservice/main.js --name general-microservice
+          sudo pm2 start dist/apps/student-microservice/main.js --name student-microservice

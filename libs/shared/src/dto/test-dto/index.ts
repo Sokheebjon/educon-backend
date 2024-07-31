@@ -1,0 +1,6 @@
+export * from "./create-test.dto"
+export * from "./update-test.dto"
+export * from "./get-resource-test.dto"
+export * from "./get-tests-by-registaryion"
+export * from "./answer-to-test.dto"
+export * from "./update-answer-to-test.dto"

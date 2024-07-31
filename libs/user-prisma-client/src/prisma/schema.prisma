@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+  binaryTargets   = ["native", "rhel-openssl-1.0.x", "debian-openssl-3.0.x"]
+}
+
+generator nestjsDto {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("USER_DATABASE_URL")
+}
+
+enum RoleType {
+  SUPER_ADMIN
+  ADMIN
+  TEACHER
+  COMENDANT
+  DOC_CONFIRMER
+  SUPPLY_OFFICER
+  VERTUAL_USER
+}
+
+enum PermissionType {
+  ADMIN
+  TEACHER
+  COMENDANT
+  DOC_CONFIRMER
+  SUPPLY_OFFICER
+  VERTUAL_USER
+}
+
+enum PermissionAction {
+  CREATE
+  UPDATE
+  DELETE
+  READ
+  MANAGE
+}
+
+model Permission {
+  id               String           @id @default(uuid())
+  permissionName   String
+  description      String
+  permissionType   PermissionType
+  permissionAction PermissionAction
+  role             Role[]
+}
+
+model Role {
+  id          String       @id @default(uuid())
+  name        String
+  description String
+  type        RoleType     @unique()
+  permissions Permission[]
+  role        User[]
+}
+
+model User {
+  id              String   @id @default(uuid())
+  firstName       String
+  lastName        String
+  passport        String?
+  pinfl           String?
+  phoneNumber     String   @unique()
+  roleId          String
+  isActive        Boolean  @default(true)
+  role            Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  passwordHash    String
+  passwordAttempt Int?
+  createdById     String?
+  createdBy       User?    @relation("CreatedBy", fields: [createdById], references: [id])
+  userCreators    User[]   @relation("CreatedBy")
+  position        String?
+  dapartment      String?
+  photoId         String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Verification {
+  id          String   @id @default(uuid())
+  code        String
+  createdAt   DateTime @default(now())
+  expiredAt   DateTime
+  phoneNumber String
+}
